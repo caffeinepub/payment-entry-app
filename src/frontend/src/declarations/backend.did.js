@@ -8,88 +8,70 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
-export const Payment = IDL.Record({
-  'chequeDate' : IDL.Opt(IDL.Text),
+export const PaymentMode = IDL.Record({
   'chequeNumber' : IDL.Opt(IDL.Text),
-  'user' : IDL.Principal,
-  'chequeAmount' : IDL.Opt(IDL.Nat),
+  'date' : IDL.Text,
+  'mode' : IDL.Text,
   'bankName' : IDL.Opt(IDL.Text),
-  'invoiceNumber' : IDL.Nat,
-  'neftAmount' : IDL.Opt(IDL.Nat),
-  'paymentMode' : IDL.Text,
-  'neftDate' : IDL.Opt(IDL.Text),
+  'amount' : IDL.Nat,
   'transactionId' : IDL.Opt(IDL.Text),
+});
+export const Payment = IDL.Record({
+  'user' : IDL.Principal,
+  'invoiceNumbers' : IDL.Vec(IDL.Nat),
+  'paymentModes' : IDL.Vec(PaymentMode),
 });
 
 export const idlService = IDL.Service({
+  'clearAllPayments' : IDL.Func([], [], []),
   'getAllPayments' : IDL.Func([], [IDL.Vec(Payment)], ['query']),
   'getPaymentsByInvoiceNumber' : IDL.Func(
       [IDL.Nat],
       [IDL.Vec(Payment)],
       ['query'],
     ),
+  'getPaymentsByMode' : IDL.Func([IDL.Text], [IDL.Vec(Payment)], ['query']),
   'getPaymentsByUser' : IDL.Func(
       [IDL.Principal],
       [IDL.Vec(Payment)],
       ['query'],
     ),
-  'submitPayment' : IDL.Func(
-      [
-        IDL.Nat,
-        IDL.Text,
-        IDL.Opt(IDL.Text),
-        IDL.Opt(IDL.Nat),
-        IDL.Opt(IDL.Text),
-        IDL.Opt(IDL.Text),
-        IDL.Opt(IDL.Text),
-        IDL.Opt(IDL.Nat),
-        IDL.Opt(IDL.Text),
-      ],
-      [],
-      [],
-    ),
+  'submitPayment' : IDL.Func([IDL.Vec(IDL.Nat), IDL.Vec(PaymentMode)], [], []),
 });
 
 export const idlInitArgs = [];
 
 export const idlFactory = ({ IDL }) => {
-  const Payment = IDL.Record({
-    'chequeDate' : IDL.Opt(IDL.Text),
+  const PaymentMode = IDL.Record({
     'chequeNumber' : IDL.Opt(IDL.Text),
-    'user' : IDL.Principal,
-    'chequeAmount' : IDL.Opt(IDL.Nat),
+    'date' : IDL.Text,
+    'mode' : IDL.Text,
     'bankName' : IDL.Opt(IDL.Text),
-    'invoiceNumber' : IDL.Nat,
-    'neftAmount' : IDL.Opt(IDL.Nat),
-    'paymentMode' : IDL.Text,
-    'neftDate' : IDL.Opt(IDL.Text),
+    'amount' : IDL.Nat,
     'transactionId' : IDL.Opt(IDL.Text),
+  });
+  const Payment = IDL.Record({
+    'user' : IDL.Principal,
+    'invoiceNumbers' : IDL.Vec(IDL.Nat),
+    'paymentModes' : IDL.Vec(PaymentMode),
   });
   
   return IDL.Service({
+    'clearAllPayments' : IDL.Func([], [], []),
     'getAllPayments' : IDL.Func([], [IDL.Vec(Payment)], ['query']),
     'getPaymentsByInvoiceNumber' : IDL.Func(
         [IDL.Nat],
         [IDL.Vec(Payment)],
         ['query'],
       ),
+    'getPaymentsByMode' : IDL.Func([IDL.Text], [IDL.Vec(Payment)], ['query']),
     'getPaymentsByUser' : IDL.Func(
         [IDL.Principal],
         [IDL.Vec(Payment)],
         ['query'],
       ),
     'submitPayment' : IDL.Func(
-        [
-          IDL.Nat,
-          IDL.Text,
-          IDL.Opt(IDL.Text),
-          IDL.Opt(IDL.Nat),
-          IDL.Opt(IDL.Text),
-          IDL.Opt(IDL.Text),
-          IDL.Opt(IDL.Text),
-          IDL.Opt(IDL.Nat),
-          IDL.Opt(IDL.Text),
-        ],
+        [IDL.Vec(IDL.Nat), IDL.Vec(PaymentMode)],
         [],
         [],
       ),

@@ -1,9 +1,10 @@
 {
   "frontend/src/App.tsx": "Main application component with header, payment entry form section, payment records table section, and footer with attribution.",
-  "frontend/src/components/PaymentEntryForm.tsx": "Payment entry form component with conditional rendering of NEFT or Cheque fields based on payment mode selection, form validation, and submission handling.",
-  "frontend/src/components/PaymentReportTable.tsx": "Payment records table component that displays all submitted payments with export to Excel functionality.",
-  "frontend/src/hooks/useQueries.ts": "Custom React Query hooks for fetching all payments and submitting new payment entries to the backend.",
-  "frontend/src/utils/excelExport.ts": "Utility function to export payment data to CSV format (Excel-compatible) with proper formatting and download handling.",
+  "frontend/src/components/PaymentEntryForm.tsx": "Payment entry form component with checkbox selection for multiple payment modes (NEFT and/or Cheque), comma-separated invoice number input supporting alphanumeric values, simultaneous display of all selected payment mode fields, and validation requiring at least one mode and invoice number.",
+  "frontend/src/components/PaymentReportTable.tsx": "Payment records table component that flattens and displays payment records (one row per payment mode per invoice), includes simplified smaller buttons for Clear Records and Download Excel with loading states and confirmation dialog.",
+  "frontend/src/hooks/useQueries.ts": "Custom React Query hooks for fetching all payments, submitting new payments with multiple invoice numbers and payment modes, and clearing all payment records with automatic query invalidation.",
+  "frontend/src/utils/excelExport.ts": "Utility function to export flattened payment data to CSV format with formatted dates for Excel compatibility, handling multiple invoice numbers and payment modes per record with automatic download handling.",
   "frontend/src/index.css": "Global styles with OKLCH color system optimized for mobile devices, clean white and light grey theme, and touch-friendly input sizing.",
-  "frontend/tailwind.config.js": "Tailwind configuration with mobile-first responsive design, minimal color palette, and optimized container settings."
+  "frontend/tailwind.config.js": "Tailwind configuration with mobile-first responsive design, minimal color palette, and optimized container settings.",
+  "frontend/src/utils/dateFormat.ts": "Utility function that formats date strings from ISO format (YYYY-MM-DD) to human-readable format (MM/DD/YYYY), returning '-' for invalid or empty dates."
 }

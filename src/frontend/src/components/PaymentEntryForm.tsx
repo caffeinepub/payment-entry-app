@@ -2,13 +2,17 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useSubmitPayment } from '../hooks/useQueries';
 import { Loader2 } from 'lucide-react';
+import type { PaymentMode } from '../backend';
 
 export default function PaymentEntryForm() {
-  const [invoiceNumber, setInvoiceNumber] = useState('');
-  const [paymentMode, setPaymentMode] = useState<string>('');
+  const [invoiceNumbers, setInvoiceNumbers] = useState('');
+  const [selectedModes, setSelectedModes] = useState<{ neft: boolean; cheque: boolean }>({
+    neft: false,
+    cheque: false,
+  });
   
   // NEFT fields
   const [transactionId, setTransactionId] = useState('');
@@ -26,42 +30,85 @@ export default function PaymentEntryForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!invoiceNumber || !paymentMode) {
-      alert('Please fill in all required fields');
+    if (!invoiceNumbers.trim()) {
+      alert('Please enter at least one invoice number');
       return;
     }
 
-    if (paymentMode === 'NEFT') {
+    if (!selectedModes.neft && !selectedModes.cheque) {
+      alert('Please select at least one payment mode');
+      return;
+    }
+
+    // Parse invoice numbers (comma-separated, can be alphanumeric)
+    const invoiceNumbersArray = invoiceNumbers
+      .split(',')
+      .map(num => num.trim())
+      .filter(num => num !== '');
+
+    if (invoiceNumbersArray.length === 0) {
+      alert('Please enter valid invoice numbers');
+      return;
+    }
+
+    // Convert invoice numbers to bigint (extract numeric part or use hash)
+    const invoiceNumbersBigInt = invoiceNumbersArray.map(num => {
+      // Try to parse as number, if fails use a simple hash
+      const parsed = parseInt(num.replace(/\D/g, ''), 10);
+      if (isNaN(parsed) || parsed === 0) {
+        // Create a simple hash from the string
+        let hash = 0;
+        for (let i = 0; i < num.length; i++) {
+          hash = ((hash << 5) - hash) + num.charCodeAt(i);
+          hash = hash & hash; // Convert to 32bit integer
+        }
+        return BigInt(Math.abs(hash));
+      }
+      return BigInt(parsed);
+    });
+
+    const paymentModes: PaymentMode[] = [];
+
+    // Add NEFT payment mode if selected
+    if (selectedModes.neft) {
       if (!transactionId || !neftAmount || !neftDate) {
         alert('Please fill in all NEFT fields');
         return;
       }
+      paymentModes.push({
+        mode: 'NEFT',
+        transactionId,
+        amount: BigInt(neftAmount),
+        date: neftDate,
+        bankName: undefined,
+        chequeNumber: undefined,
+      });
     }
 
-    if (paymentMode === 'Cheque') {
+    // Add Cheque payment mode if selected
+    if (selectedModes.cheque) {
       if (!bankName || !chequeNumber || !chequeAmount || !chequeDate) {
         alert('Please fill in all Cheque fields');
         return;
       }
+      paymentModes.push({
+        mode: 'Cheque',
+        transactionId: undefined,
+        amount: BigInt(chequeAmount),
+        date: chequeDate,
+        bankName,
+        chequeNumber,
+      });
     }
-
-    const invoiceNum = BigInt(invoiceNumber);
     
     submitPayment({
-      invoiceNumber: invoiceNum,
-      paymentMode,
-      transactionId: paymentMode === 'NEFT' ? transactionId : null,
-      neftAmount: paymentMode === 'NEFT' ? BigInt(neftAmount) : null,
-      neftDate: paymentMode === 'NEFT' ? neftDate : null,
-      bankName: paymentMode === 'Cheque' ? bankName : null,
-      chequeNumber: paymentMode === 'Cheque' ? chequeNumber : null,
-      chequeAmount: paymentMode === 'Cheque' ? BigInt(chequeAmount) : null,
-      chequeDate: paymentMode === 'Cheque' ? chequeDate : null,
+      invoiceNumbers: invoiceNumbersBigInt,
+      paymentModes,
     }, {
       onSuccess: () => {
         // Clear form
-        setInvoiceNumber('');
-        setPaymentMode('');
+        setInvoiceNumbers('');
+        setSelectedModes({ neft: false, cheque: false });
         setTransactionId('');
         setNeftAmount('');
         setNeftDate('');
@@ -79,37 +126,61 @@ export default function PaymentEntryForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-2">
-        <Label htmlFor="invoiceNumber" className="text-base">
-          Customer Invoice Number <span className="text-destructive">*</span>
+        <Label htmlFor="invoiceNumbers" className="text-base">
+          Invoice Number(s) <span className="text-destructive">*</span>
         </Label>
         <Input
-          id="invoiceNumber"
+          id="invoiceNumbers"
           type="text"
-          value={invoiceNumber}
-          onChange={(e) => setInvoiceNumber(e.target.value)}
-          placeholder="Enter invoice number"
+          value={invoiceNumbers}
+          onChange={(e) => setInvoiceNumbers(e.target.value)}
+          placeholder="e.g., INV-001, BILL123, 12345 (comma-separated for multiple)"
           required
           className="h-12 text-base"
         />
+        <p className="text-sm text-muted-foreground">
+          Enter one or more invoice numbers separated by commas. Accepts text and numbers.
+        </p>
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="paymentMode" className="text-base">
-          Payment Mode <span className="text-destructive">*</span>
+      <div className="space-y-3">
+        <Label className="text-base">
+          Payment Mode(s) <span className="text-destructive">*</span>
         </Label>
-        <Select value={paymentMode} onValueChange={setPaymentMode} required>
-          <SelectTrigger id="paymentMode" className="h-12 text-base">
-            <SelectValue placeholder="Select payment mode" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="NEFT">NEFT</SelectItem>
-            <SelectItem value="Cheque">Cheque</SelectItem>
-          </SelectContent>
-        </Select>
+        <div className="space-y-3">
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="neft"
+              checked={selectedModes.neft}
+              onCheckedChange={(checked) => 
+                setSelectedModes(prev => ({ ...prev, neft: checked === true }))
+              }
+            />
+            <Label htmlFor="neft" className="text-base font-normal cursor-pointer">
+              NEFT
+            </Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="cheque"
+              checked={selectedModes.cheque}
+              onCheckedChange={(checked) => 
+                setSelectedModes(prev => ({ ...prev, cheque: checked === true }))
+              }
+            />
+            <Label htmlFor="cheque" className="text-base font-normal cursor-pointer">
+              Cheque
+            </Label>
+          </div>
+        </div>
+        <p className="text-sm text-muted-foreground">
+          Select one or both payment modes. Each mode will be recorded separately.
+        </p>
       </div>
 
-      {paymentMode === 'NEFT' && (
+      {selectedModes.neft && (
         <div className="space-y-6 pt-4 border-t border-border">
+          <h3 className="font-medium text-base">NEFT Payment Details</h3>
           <div className="space-y-2">
             <Label htmlFor="transactionId" className="text-base">
               Transaction ID / UTR Number <span className="text-destructive">*</span>
@@ -120,7 +191,7 @@ export default function PaymentEntryForm() {
               value={transactionId}
               onChange={(e) => setTransactionId(e.target.value)}
               placeholder="Enter transaction ID"
-              required
+              required={selectedModes.neft}
               className="h-12 text-base"
             />
           </div>
@@ -135,7 +206,7 @@ export default function PaymentEntryForm() {
               value={neftAmount}
               onChange={(e) => setNeftAmount(e.target.value)}
               placeholder="Enter amount"
-              required
+              required={selectedModes.neft}
               min="1"
               className="h-12 text-base"
             />
@@ -150,15 +221,16 @@ export default function PaymentEntryForm() {
               type="date"
               value={neftDate}
               onChange={(e) => setNeftDate(e.target.value)}
-              required
+              required={selectedModes.neft}
               className="h-12 text-base"
             />
           </div>
         </div>
       )}
 
-      {paymentMode === 'Cheque' && (
+      {selectedModes.cheque && (
         <div className="space-y-6 pt-4 border-t border-border">
+          <h3 className="font-medium text-base">Cheque Payment Details</h3>
           <div className="space-y-2">
             <Label htmlFor="bankName" className="text-base">
               Bank Name <span className="text-destructive">*</span>
@@ -169,7 +241,7 @@ export default function PaymentEntryForm() {
               value={bankName}
               onChange={(e) => setBankName(e.target.value)}
               placeholder="Enter bank name"
-              required
+              required={selectedModes.cheque}
               className="h-12 text-base"
             />
           </div>
@@ -184,7 +256,7 @@ export default function PaymentEntryForm() {
               value={chequeNumber}
               onChange={(e) => setChequeNumber(e.target.value)}
               placeholder="Enter cheque number"
-              required
+              required={selectedModes.cheque}
               className="h-12 text-base"
             />
           </div>
@@ -199,7 +271,7 @@ export default function PaymentEntryForm() {
               value={chequeAmount}
               onChange={(e) => setChequeAmount(e.target.value)}
               placeholder="Enter amount"
-              required
+              required={selectedModes.cheque}
               min="1"
               className="h-12 text-base"
             />
@@ -214,7 +286,7 @@ export default function PaymentEntryForm() {
               type="date"
               value={chequeDate}
               onChange={(e) => setChequeDate(e.target.value)}
-              required
+              required={selectedModes.cheque}
               className="h-12 text-base"
             />
           </div>

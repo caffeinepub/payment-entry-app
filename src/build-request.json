@@ -1,153 +1,93 @@
 {
   "kind": "build_request",
-  "title": "Build payment entry app with dynamic form and Excel export",
+  "title": "Refine UI buttons and add multi-payment/multi-invoice support",
   "projectName": "Payment Entry",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-1",
-      "text": "Create a payment entry form with Customer Invoice Number (required text field) and Payment Mode dropdown (required, options: NEFT, Cheque)",
+      "id": "REQ-11",
+      "text": "Reduce the size and simplify the styling of the Clear Records button and Download Excel button in the PaymentReportTable component to make them smaller and more compact",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2"
+          "msg-user-final"
+        ],
+        "quotes": [
+          "clear records and download button make it simple smaller"
         ]
       },
       "acceptanceCriteria": [
-        "Invoice Number field accepts text input and is marked as required",
-        "Payment Mode dropdown displays exactly two options: NEFT and Cheque",
-        "Both fields are always visible on the form"
+        "Both Clear Records and Download Excel buttons are visually smaller than current implementation",
+        "Button styling is simplified with minimal padding and compact text",
+        "Buttons remain touch-friendly for mobile devices"
       ]
     },
     {
-      "id": "REQ-2",
-      "text": "When Payment Mode is set to NEFT, dynamically show Transaction ID/UTR Number (required text field), Amount (required number field), and Date of Payment (required date picker). Hide all Cheque-specific fields.",
+      "id": "REQ-12",
+      "text": "Change the Invoice Number field in the payment entry form to accept both text and numeric input (type=\"text\" instead of restricted number format)",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2"
+          "msg-user-final"
+        ],
+        "quotes": [
+          "invoice number can contain both text and number format"
         ]
       },
       "acceptanceCriteria": [
-        "NEFT fields appear only when NEFT is selected",
-        "All three NEFT fields are marked as required",
-        "Cheque fields are hidden when NEFT mode is active",
-        "Fields update immediately when Payment Mode changes"
+        "Invoice Number field accepts alphanumeric input like 'INV-001', 'BILL123', or '12345'",
+        "Field validation allows mixed text and number formats",
+        "Existing numeric-only invoices continue to work"
       ]
     },
     {
-      "id": "REQ-3",
-      "text": "When Payment Mode is set to Cheque, dynamically show Bank Name (required text field), Cheque Number (required text field), Cheque Amount (required number field), and Cheque Date (required date picker). Hide all NEFT-specific fields.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Cheque fields appear only when Cheque is selected",
-        "All four Cheque fields are marked as required",
-        "NEFT fields are hidden when Cheque mode is active",
-        "Fields update immediately when Payment Mode changes"
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "text": "Store all payment entry data in the backend with fields: Invoice Number, Payment Mode, Transaction ID (NEFT only), NEFT Amount (NEFT only), NEFT Date (NEFT only), Bank Name (Cheque only), Cheque Number (Cheque only), Cheque Amount (Cheque only), Cheque Date (Cheque only)",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Backend stores payment records with all specified fields",
-        "Conditional fields store null/empty when not applicable to payment mode",
-        "Data persists between page reloads",
-        "Records can be retrieved for display and export"
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "text": "On Submit button click, save the payment entry to the backend and automatically clear all form fields to their default state",
+      "id": "REQ-13",
+      "text": "Add the ability to select multiple payment modes (NEFT and/or Cheque) for a single invoice number in the payment entry form, showing all relevant fields for selected modes simultaneously",
       "target": "both",
       "source": {
         "messageIds": [
-          "msg-2"
+          "msg-user-final"
+        ],
+        "quotes": [
+          "add multiple payment option in single payment"
         ]
       },
       "acceptanceCriteria": [
-        "Submit saves complete payment record to backend",
-        "Form clears immediately after successful save",
-        "Invoice Number resets to empty",
-        "Payment Mode resets to default/unselected state",
-        "All conditional fields clear and hide appropriately"
+        "User can select one or both payment modes (NEFT, Cheque) for a single invoice",
+        "When both modes are selected, all NEFT fields and all Cheque fields are visible simultaneously",
+        "Form validates that at least one payment mode is selected",
+        "Submit saves each selected payment mode as a separate record with the same invoice number"
       ]
     },
     {
-      "id": "REQ-6",
-      "text": "Create a Report section that displays all saved payment records in a table with columns: Invoice Number, Payment Mode, Transaction ID/UTR, NEFT Amount, NEFT Date, Bank Name, Cheque Number, Cheque Amount, Cheque Date",
-      "target": "frontend",
+      "id": "REQ-14",
+      "text": "Add the ability to enter multiple invoice numbers for a single payment transaction, allowing one payment (NEFT or Cheque) to be applied across multiple bills",
+      "target": "both",
       "source": {
         "messageIds": [
-          "msg-2"
+          "msg-user-final"
+        ],
+        "quotes": [
+          "add single payment option for multiple bill"
         ]
       },
       "acceptanceCriteria": [
-        "Table displays all saved payment entries",
-        "All nine columns are visible in the table",
-        "Empty cells display for fields not applicable to payment mode",
-        "Table updates when new entries are submitted"
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "text": "Add a Download Excel button in the Report section that exports all payment records to an Excel file with columns: Invoice Number, Payment Mode, Transaction ID/UTR, NEFT Amount, NEFT Date, Bank Name, Cheque Number, Cheque Amount, Cheque Date",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Download Excel button is visible in Report section",
-        "Clicking button generates and downloads Excel file",
-        "Excel file contains all nine specified columns",
-        "Excel includes all saved payment records",
-        "Empty cells for fields not applicable to payment mode"
-      ]
-    },
-    {
-      "id": "REQ-8",
-      "text": "Implement mobile-first responsive layout with clean white and light grey theme, large input fields optimized for touch, minimal UI with no animations, and lightweight design for fast loading on low-end Android phones",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Layout is fully responsive and mobile-optimized",
-        "Color scheme uses white and light grey",
-        "Input fields are large enough for easy mobile typing",
-        "No animations or transitions",
-        "Page loads quickly with minimal resources",
-        "UI is clean and uncluttered"
+        "User can input multiple invoice numbers (comma-separated or multi-select field)",
+        "Single payment details (Transaction ID, Amount, Bank Name, etc.) apply to all entered invoices",
+        "Submit creates separate payment records for each invoice number with the same payment details",
+        "Form clearly indicates that one payment is being split across multiple invoices"
       ]
     }
   ],
   "constraints": [
-    "Must be lightweight and optimized for low-end Android phones",
-    "Must use only the platform's supported stack (React, Motoko backend)",
-    "No animations or heavy visual effects",
-    "Must load and perform quickly"
+    "Maintain mobile-first responsive design optimized for low-end Android phones",
+    "Keep UI lightweight with no animations",
+    "Preserve existing payment record data structure in backend"
   ],
   "nonGoals": [
-    "User authentication or access control",
-    "Payment processing or integration with payment gateways",
-    "Advanced reporting or analytics features",
-    "Editing or deleting existing payment records",
-    "Multi-user collaboration features"
+    "Authentication or user role management",
+    "Payment amount validation or distribution logic across invoices",
+    "Advanced search or filtering in payment records"
   ],
   "imageRequirements": {
     "required": [],

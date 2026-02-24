@@ -7,21 +7,24 @@ export interface None {
     __kind__: "None";
 }
 export type Option<T> = Some<T> | None;
-export interface Payment {
-    chequeDate?: string;
+export interface PaymentMode {
     chequeNumber?: string;
-    user: Principal;
-    chequeAmount?: bigint;
+    date: string;
+    mode: string;
     bankName?: string;
-    invoiceNumber: bigint;
-    neftAmount?: bigint;
-    paymentMode: string;
-    neftDate?: string;
+    amount: bigint;
     transactionId?: string;
 }
+export interface Payment {
+    user: Principal;
+    invoiceNumbers: Array<bigint>;
+    paymentModes: Array<PaymentMode>;
+}
 export interface backendInterface {
+    clearAllPayments(): Promise<void>;
     getAllPayments(): Promise<Array<Payment>>;
     getPaymentsByInvoiceNumber(invoiceNumber: bigint): Promise<Array<Payment>>;
+    getPaymentsByMode(mode: string): Promise<Array<Payment>>;
     getPaymentsByUser(user: Principal): Promise<Array<Payment>>;
-    submitPayment(invoiceNumber: bigint, paymentMode: string, transactionId: string | null, neftAmount: bigint | null, neftDate: string | null, bankName: string | null, chequeNumber: string | null, chequeAmount: bigint | null, chequeDate: string | null): Promise<void>;
+    submitPayment(invoiceNumbers: Array<bigint>, paymentModes: Array<PaymentMode>): Promise<void>;
 }

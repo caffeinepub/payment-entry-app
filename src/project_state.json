@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 3,
+  "projectStateVersion": 7,
   "summary": "Mobile-friendly web-based payment entry app for office staff. Features dynamic form with NEFT/Cheque payment modes, local storage persistence, and Excel export. Lightweight, minimal design optimized for low-end Android phones.",
   "architectural_notes": [
     "Frontend-only app using HTML, CSS, JavaScript",
@@ -12,7 +12,7 @@
     "No animations or heavy assets for performance"
   ],
   "known_issues": [],
-  "isFixRequest": false,
+  "isFixRequest": true,
   "existing_features": [
     {
       "id": "feature-create-a-payment-entry-form-with-customer-invoice-number-required-text-field-and-payment-mode-dropdown-required-options-neft-cheque",
@@ -69,6 +69,54 @@
         "REQ-8"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-fix-the-payment-records-table-to-correctly-display-neft-date-and-cheque-date-columns-ensure-date-values-from-the-backend-are-properly-formatted-and-rendered-in-the-table",
+      "title": "Fix the payment records table to correctly display NEFT Date and Cheque Date columns. Ensure date values from the backend are properly formatted and rendered in the table.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-clear-records-button-in-the-payment-records-page-that-deletes-all-saved-payment-records-from-the-backend-when-clicked",
+      "title": "Add a Clear Records button in the payment records page that deletes all saved payment records from the backend when clicked.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-reduce-the-size-and-simplify-the-styling-of-the-clear-records-button-and-download-excel-button-in-the-paymentreporttable-component-to-make-them-smaller-and-more-compact",
+      "title": "Reduce the size and simplify the styling of the Clear Records button and Download Excel button in the PaymentReportTable component to make them smaller and more compact",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-change-the-invoice-number-field-in-the-payment-entry-form-to-accept-both-text-and-numeric-input-type-text-instead-of-restricted-number-format",
+      "title": "Change the Invoice Number field in the payment entry form to accept both text and numeric input (type=\"text\" instead of restricted number format)",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-the-ability-to-select-multiple-payment-modes-neft-and-or-cheque-for-a-single-invoice-number-in-the-payment-entry-form-showing-all-relevant-fields-for-selected-modes-simultaneously",
+      "title": "Add the ability to select multiple payment modes (NEFT and/or Cheque) for a single invoice number in the payment entry form, showing all relevant fields for selected modes simultaneously",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-the-ability-to-enter-multiple-invoice-numbers-for-a-single-payment-transaction-allowing-one-payment-neft-or-cheque-to-be-applied-across-multiple-bills",
+      "title": "Add the ability to enter multiple invoice numbers for a single payment transaction, allowing one payment (NEFT or Cheque) to be applied across multiple bills",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -114,6 +162,42 @@
       "reqIds": [
         "REQ-4"
       ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Fix date display in payment records table",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-12",
+      "summary": "Add Clear Records button in payment records page",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-13",
+      "summary": "Make Clear Records and Download buttons simpler and smaller",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-14",
+      "summary": "Allow Invoice Number field to accept both text and numeric formats",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-15",
+      "summary": "Add multiple payment modes for a single invoice",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-16",
+      "summary": "Add single payment option for multiple invoices/bills",
+      "reqIds": [],
       "status": "pending"
     }
   ],

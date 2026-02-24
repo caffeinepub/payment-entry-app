@@ -11,35 +11,25 @@ import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
 export interface Payment {
-  'chequeDate' : [] | [string],
-  'chequeNumber' : [] | [string],
   'user' : Principal,
-  'chequeAmount' : [] | [bigint],
+  'invoiceNumbers' : Array<bigint>,
+  'paymentModes' : Array<PaymentMode>,
+}
+export interface PaymentMode {
+  'chequeNumber' : [] | [string],
+  'date' : string,
+  'mode' : string,
   'bankName' : [] | [string],
-  'invoiceNumber' : bigint,
-  'neftAmount' : [] | [bigint],
-  'paymentMode' : string,
-  'neftDate' : [] | [string],
+  'amount' : bigint,
   'transactionId' : [] | [string],
 }
 export interface _SERVICE {
+  'clearAllPayments' : ActorMethod<[], undefined>,
   'getAllPayments' : ActorMethod<[], Array<Payment>>,
   'getPaymentsByInvoiceNumber' : ActorMethod<[bigint], Array<Payment>>,
+  'getPaymentsByMode' : ActorMethod<[string], Array<Payment>>,
   'getPaymentsByUser' : ActorMethod<[Principal], Array<Payment>>,
-  'submitPayment' : ActorMethod<
-    [
-      bigint,
-      string,
-      [] | [string],
-      [] | [bigint],
-      [] | [string],
-      [] | [string],
-      [] | [string],
-      [] | [bigint],
-      [] | [string],
-    ],
-    undefined
-  >,
+  'submitPayment' : ActorMethod<[Array<bigint>, Array<PaymentMode>], undefined>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

@@ -89,27 +89,44 @@ export class ExternalBlob {
         return this;
     }
 }
-export interface Payment {
-    chequeDate?: string;
+export interface PaymentMode {
     chequeNumber?: string;
-    user: Principal;
-    chequeAmount?: bigint;
+    date: string;
+    mode: string;
     bankName?: string;
-    invoiceNumber: bigint;
-    neftAmount?: bigint;
-    paymentMode: string;
-    neftDate?: string;
+    amount: bigint;
     transactionId?: string;
 }
+export interface Payment {
+    user: Principal;
+    invoiceNumbers: Array<bigint>;
+    paymentModes: Array<PaymentMode>;
+}
 export interface backendInterface {
+    clearAllPayments(): Promise<void>;
     getAllPayments(): Promise<Array<Payment>>;
     getPaymentsByInvoiceNumber(invoiceNumber: bigint): Promise<Array<Payment>>;
+    getPaymentsByMode(mode: string): Promise<Array<Payment>>;
     getPaymentsByUser(user: Principal): Promise<Array<Payment>>;
-    submitPayment(invoiceNumber: bigint, paymentMode: string, transactionId: string | null, neftAmount: bigint | null, neftDate: string | null, bankName: string | null, chequeNumber: string | null, chequeAmount: bigint | null, chequeDate: string | null): Promise<void>;
+    submitPayment(invoiceNumbers: Array<bigint>, paymentModes: Array<PaymentMode>): Promise<void>;
 }
-import type { Payment as _Payment } from "./declarations/backend.did.d.ts";
+import type { Payment as _Payment, PaymentMode as _PaymentMode } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
+    async clearAllPayments(): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.clearAllPayments();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.clearAllPayments();
+            return result;
+        }
+    }
     async getAllPayments(): Promise<Array<Payment>> {
         if (this.processError) {
             try {
@@ -138,6 +155,20 @@ export class Backend implements backendInterface {
             return from_candid_vec_n1(this._uploadFile, this._downloadFile, result);
         }
     }
+    async getPaymentsByMode(arg0: string): Promise<Array<Payment>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getPaymentsByMode(arg0);
+                return from_candid_vec_n1(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getPaymentsByMode(arg0);
+            return from_candid_vec_n1(this._uploadFile, this._downloadFile, result);
+        }
+    }
     async getPaymentsByUser(arg0: Principal): Promise<Array<Payment>> {
         if (this.processError) {
             try {
@@ -152,74 +183,104 @@ export class Backend implements backendInterface {
             return from_candid_vec_n1(this._uploadFile, this._downloadFile, result);
         }
     }
-    async submitPayment(arg0: bigint, arg1: string, arg2: string | null, arg3: bigint | null, arg4: string | null, arg5: string | null, arg6: string | null, arg7: bigint | null, arg8: string | null): Promise<void> {
+    async submitPayment(arg0: Array<bigint>, arg1: Array<PaymentMode>): Promise<void> {
         if (this.processError) {
             try {
-                const result = await this.actor.submitPayment(arg0, arg1, to_candid_opt_n6(this._uploadFile, this._downloadFile, arg2), to_candid_opt_n7(this._uploadFile, this._downloadFile, arg3), to_candid_opt_n6(this._uploadFile, this._downloadFile, arg4), to_candid_opt_n6(this._uploadFile, this._downloadFile, arg5), to_candid_opt_n6(this._uploadFile, this._downloadFile, arg6), to_candid_opt_n7(this._uploadFile, this._downloadFile, arg7), to_candid_opt_n6(this._uploadFile, this._downloadFile, arg8));
+                const result = await this.actor.submitPayment(arg0, to_candid_vec_n8(this._uploadFile, this._downloadFile, arg1));
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.submitPayment(arg0, arg1, to_candid_opt_n6(this._uploadFile, this._downloadFile, arg2), to_candid_opt_n7(this._uploadFile, this._downloadFile, arg3), to_candid_opt_n6(this._uploadFile, this._downloadFile, arg4), to_candid_opt_n6(this._uploadFile, this._downloadFile, arg5), to_candid_opt_n6(this._uploadFile, this._downloadFile, arg6), to_candid_opt_n7(this._uploadFile, this._downloadFile, arg7), to_candid_opt_n6(this._uploadFile, this._downloadFile, arg8));
+            const result = await this.actor.submitPayment(arg0, to_candid_vec_n8(this._uploadFile, this._downloadFile, arg1));
             return result;
         }
     }
 }
+function from_candid_PaymentMode_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _PaymentMode): PaymentMode {
+    return from_candid_record_n6(_uploadFile, _downloadFile, value);
+}
 function from_candid_Payment_n2(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _Payment): Payment {
     return from_candid_record_n3(_uploadFile, _downloadFile, value);
 }
-function from_candid_opt_n4(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [string]): string | null {
-    return value.length === 0 ? null : value[0];
-}
-function from_candid_opt_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [bigint]): bigint | null {
+function from_candid_opt_n7(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [string]): string | null {
     return value.length === 0 ? null : value[0];
 }
 function from_candid_record_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
-    chequeDate: [] | [string];
-    chequeNumber: [] | [string];
     user: Principal;
-    chequeAmount: [] | [bigint];
+    invoiceNumbers: Array<bigint>;
+    paymentModes: Array<_PaymentMode>;
+}): {
+    user: Principal;
+    invoiceNumbers: Array<bigint>;
+    paymentModes: Array<PaymentMode>;
+} {
+    return {
+        user: value.user,
+        invoiceNumbers: value.invoiceNumbers,
+        paymentModes: from_candid_vec_n4(_uploadFile, _downloadFile, value.paymentModes)
+    };
+}
+function from_candid_record_n6(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    chequeNumber: [] | [string];
+    date: string;
+    mode: string;
     bankName: [] | [string];
-    invoiceNumber: bigint;
-    neftAmount: [] | [bigint];
-    paymentMode: string;
-    neftDate: [] | [string];
+    amount: bigint;
     transactionId: [] | [string];
 }): {
-    chequeDate?: string;
     chequeNumber?: string;
-    user: Principal;
-    chequeAmount?: bigint;
+    date: string;
+    mode: string;
     bankName?: string;
-    invoiceNumber: bigint;
-    neftAmount?: bigint;
-    paymentMode: string;
-    neftDate?: string;
+    amount: bigint;
     transactionId?: string;
 } {
     return {
-        chequeDate: record_opt_to_undefined(from_candid_opt_n4(_uploadFile, _downloadFile, value.chequeDate)),
-        chequeNumber: record_opt_to_undefined(from_candid_opt_n4(_uploadFile, _downloadFile, value.chequeNumber)),
-        user: value.user,
-        chequeAmount: record_opt_to_undefined(from_candid_opt_n5(_uploadFile, _downloadFile, value.chequeAmount)),
-        bankName: record_opt_to_undefined(from_candid_opt_n4(_uploadFile, _downloadFile, value.bankName)),
-        invoiceNumber: value.invoiceNumber,
-        neftAmount: record_opt_to_undefined(from_candid_opt_n5(_uploadFile, _downloadFile, value.neftAmount)),
-        paymentMode: value.paymentMode,
-        neftDate: record_opt_to_undefined(from_candid_opt_n4(_uploadFile, _downloadFile, value.neftDate)),
-        transactionId: record_opt_to_undefined(from_candid_opt_n4(_uploadFile, _downloadFile, value.transactionId))
+        chequeNumber: record_opt_to_undefined(from_candid_opt_n7(_uploadFile, _downloadFile, value.chequeNumber)),
+        date: value.date,
+        mode: value.mode,
+        bankName: record_opt_to_undefined(from_candid_opt_n7(_uploadFile, _downloadFile, value.bankName)),
+        amount: value.amount,
+        transactionId: record_opt_to_undefined(from_candid_opt_n7(_uploadFile, _downloadFile, value.transactionId))
     };
 }
 function from_candid_vec_n1(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<_Payment>): Array<Payment> {
     return value.map((x)=>from_candid_Payment_n2(_uploadFile, _downloadFile, x));
 }
-function to_candid_opt_n6(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: string | null): [] | [string] {
-    return value === null ? candid_none() : candid_some(value);
+function from_candid_vec_n4(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<_PaymentMode>): Array<PaymentMode> {
+    return value.map((x)=>from_candid_PaymentMode_n5(_uploadFile, _downloadFile, x));
 }
-function to_candid_opt_n7(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: bigint | null): [] | [bigint] {
-    return value === null ? candid_none() : candid_some(value);
+function to_candid_PaymentMode_n9(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: PaymentMode): _PaymentMode {
+    return to_candid_record_n10(_uploadFile, _downloadFile, value);
+}
+function to_candid_record_n10(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    chequeNumber?: string;
+    date: string;
+    mode: string;
+    bankName?: string;
+    amount: bigint;
+    transactionId?: string;
+}): {
+    chequeNumber: [] | [string];
+    date: string;
+    mode: string;
+    bankName: [] | [string];
+    amount: bigint;
+    transactionId: [] | [string];
+} {
+    return {
+        chequeNumber: value.chequeNumber ? candid_some(value.chequeNumber) : candid_none(),
+        date: value.date,
+        mode: value.mode,
+        bankName: value.bankName ? candid_some(value.bankName) : candid_none(),
+        amount: value.amount,
+        transactionId: value.transactionId ? candid_some(value.transactionId) : candid_none()
+    };
+}
+function to_candid_vec_n8(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<PaymentMode>): Array<_PaymentMode> {
+    return value.map((x)=>to_candid_PaymentMode_n9(_uploadFile, _downloadFile, x));
 }
 export interface CreateActorOptions {
     agent?: Agent;

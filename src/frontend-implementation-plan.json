@@ -1,152 +1,71 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Payment Entry App with Dynamic Form and Excel Export",
+  "title": "Refine UI buttons and add multi-payment/multi-invoice support",
   "requirements": [
     {
-      "id": "REQ-1",
-      "summary": "Create payment entry form with Customer Invoice Number and Payment Mode dropdown",
+      "id": "REQ-11",
+      "summary": "Reduce size and simplify styling of Clear Records and Download Excel buttons in PaymentReportTable",
       "acceptanceCriteria": [
-        "Invoice Number field accepts text input and is marked as required",
-        "Payment Mode dropdown displays exactly two options: NEFT and Cheque",
-        "Both fields are always visible on the form"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/PaymentEntryForm.tsx",
-          "operation": "create",
-          "description": "Create payment entry form component with Invoice Number text input (required) and Payment Mode dropdown (required, options: NEFT, Cheque). Use shadcn-ui Input and Select components for consistent styling. Implement form state management using React hooks."
-        }
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "summary": "Dynamically show NEFT-specific fields when Payment Mode is NEFT",
-      "acceptanceCriteria": [
-        "NEFT fields appear only when NEFT is selected",
-        "All three NEFT fields are marked as required",
-        "Cheque fields are hidden when NEFT mode is active",
-        "Fields update immediately when Payment Mode changes"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/PaymentEntryForm.tsx",
-          "operation": "modify",
-          "description": "Add conditional rendering logic to show Transaction ID/UTR Number (required text), Amount (required number), and Date of Payment (required date) fields when paymentMode state equals 'NEFT'. Use shadcn-ui Input components for text/number fields and implement date picker. Hide Cheque fields when NEFT is active."
-        }
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "summary": "Dynamically show Cheque-specific fields when Payment Mode is Cheque",
-      "acceptanceCriteria": [
-        "Cheque fields appear only when Cheque is selected",
-        "All four Cheque fields are marked as required",
-        "NEFT fields are hidden when Cheque mode is active",
-        "Fields update immediately when Payment Mode changes"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/PaymentEntryForm.tsx",
-          "operation": "modify",
-          "description": "Add conditional rendering logic to show Bank Name (required text), Cheque Number (required text), Cheque Amount (required number), and Cheque Date (required date) fields when paymentMode state equals 'Cheque'. Use shadcn-ui Input components and implement date picker. Hide NEFT fields when Cheque is active."
-        }
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "summary": "Submit payment entry to backend and clear form fields on success",
-      "acceptanceCriteria": [
-        "Submit saves complete payment record to backend",
-        "Form clears immediately after successful save",
-        "Invoice Number resets to empty",
-        "Payment Mode resets to default/unselected state",
-        "All conditional fields clear and hide appropriately"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/PaymentEntryForm.tsx",
-          "operation": "modify",
-          "description": "Implement form submission handler that calls backend submitPayment method with all form values. Convert Invoice Number to bigint. Pass null for fields not applicable to selected payment mode. On successful submission, reset all form state to default values (empty strings, null payment mode). Add error handling and loading states using shadcn-ui Button component."
-        },
-        {
-          "path": "frontend/src/hooks/usePaymentSubmit.ts",
-          "operation": "create",
-          "description": "Create custom hook for payment submission logic. Handle backend API call to submitPayment with proper type conversions (string to bigint for amounts, null handling for optional fields). Return submission status, loading state, and error state. Use core-infrastructure backend connection."
-        }
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "summary": "Display all saved payment records in a table with all payment fields",
-      "acceptanceCriteria": [
-        "Table displays all saved payment entries",
-        "All nine columns are visible in the table",
-        "Empty cells display for fields not applicable to payment mode",
-        "Table updates when new entries are submitted"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/PaymentReportTable.tsx",
-          "operation": "create",
-          "description": "Create payment report table component that displays all payment records with columns: Invoice Number, Payment Mode, Transaction ID/UTR, NEFT Amount, NEFT Date, Bank Name, Cheque Number, Cheque Amount, Cheque Date. Use shadcn-ui Table components for consistent styling. Fetch payments using getAllPayments backend method. Display empty cells for null/undefined values. Convert bigint amounts to display format."
-        },
-        {
-          "path": "frontend/src/hooks/usePayments.ts",
-          "operation": "create",
-          "description": "Create custom hook to fetch and manage payment records from backend. Call getAllPayments method and maintain records in state. Provide refresh function to reload data after new submissions. Handle loading and error states. Use core-infrastructure backend connection."
-        }
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "summary": "Export all payment records to Excel file with Download Excel button",
-      "acceptanceCriteria": [
-        "Download Excel button is visible in Report section",
-        "Clicking button generates and downloads Excel file",
-        "Excel file contains all nine specified columns",
-        "Excel includes all saved payment records",
-        "Empty cells for fields not applicable to payment mode"
+        "Both Clear Records and Download Excel buttons are visually smaller than current implementation",
+        "Button styling is simplified with minimal padding and compact text",
+        "Buttons remain touch-friendly for mobile devices"
       ],
       "file_operations": [
         {
           "path": "frontend/src/components/PaymentReportTable.tsx",
           "operation": "modify",
-          "description": "Add Download Excel button above the table using shadcn-ui Button component. Implement Excel export functionality using a lightweight Excel library (xlsx or similar). Export all payment records with columns: Invoice Number, Payment Mode, Transaction ID/UTR, NEFT Amount, NEFT Date, Bank Name, Cheque Number, Cheque Amount, Cheque Date. Handle null values as empty cells. Convert bigint amounts to numbers for Excel."
-        },
-        {
-          "path": "frontend/src/utils/excelExport.ts",
-          "operation": "create",
-          "description": "Create utility function to export payment data to Excel format. Accept array of Payment records and generate Excel file with proper column headers and data formatting. Handle type conversions (bigint to number) and null values. Return downloadable blob."
+          "description": "Reduce button sizes by applying compact padding classes (e.g., px-2 py-1 text-sm) and simplified styling to both Clear Records and Download Excel buttons while maintaining minimum 44px touch targets for mobile accessibility"
         }
       ]
     },
     {
-      "id": "REQ-8",
-      "summary": "Implement mobile-first responsive layout with clean white and light grey theme",
+      "id": "REQ-12",
+      "summary": "Change Invoice Number field to accept both text and numeric input",
       "acceptanceCriteria": [
-        "Layout is fully responsive and mobile-optimized",
-        "Color scheme uses white and light grey",
-        "Input fields are large enough for easy mobile typing",
-        "No animations or transitions",
-        "Page loads quickly with minimal resources",
-        "UI is clean and uncluttered"
+        "Invoice Number field accepts alphanumeric input like 'INV-001', 'BILL123', or '12345'",
+        "Field validation allows mixed text and number formats",
+        "Existing numeric-only invoices continue to work"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/index.css",
+          "path": "frontend/src/components/PaymentEntryForm.tsx",
           "operation": "modify",
-          "description": "Configure mobile-first responsive design with white and light grey color scheme. Set large input field sizes optimized for touch (min-height: 48px). Remove all animations and transitions. Use lightweight font stack. Apply clean, minimal styling with proper spacing for mobile devices."
-        },
+          "description": "Change the invoice number input field type from number to text to accept alphanumeric values, update validation to allow mixed text and number formats, and ensure compatibility with existing numeric invoice numbers"
+        }
+      ]
+    },
+    {
+      "id": "REQ-13",
+      "summary": "Add ability to select multiple payment modes (NEFT and/or Cheque) for a single invoice, showing all relevant fields simultaneously",
+      "acceptanceCriteria": [
+        "User can select one or both payment modes (NEFT, Cheque) for a single invoice",
+        "When both modes are selected, all NEFT fields and all Cheque fields are visible simultaneously",
+        "Form validates that at least one payment mode is selected",
+        "Submit saves each selected payment mode as a separate record with the same invoice number"
+      ],
+      "file_operations": [
         {
-          "path": "frontend/tailwind.config.js",
+          "path": "frontend/src/components/PaymentEntryForm.tsx",
           "operation": "modify",
-          "description": "Configure Tailwind theme with white and light grey colors. Set mobile-first breakpoints. Disable animation utilities. Configure large touch-friendly sizing defaults. Optimize for minimal CSS output."
-        },
+          "description": "Replace single payment mode dropdown with checkbox selection allowing multiple modes (NEFT and/or Cheque), render all selected payment mode fields simultaneously, add validation requiring at least one mode selection, and prepare paymentModes array data structure with separate entries for each selected mode when submitting to backend"
+        }
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "summary": "Add ability to enter multiple invoice numbers for a single payment transaction",
+      "acceptanceCriteria": [
+        "User can input multiple invoice numbers (comma-separated or multi-select field)",
+        "Single payment details (Transaction ID, Amount, Bank Name, etc.) apply to all entered invoices",
+        "Submit creates separate payment records for each invoice number with the same payment details",
+        "Form clearly indicates that one payment is being split across multiple invoices"
+      ],
+      "file_operations": [
         {
-          "path": "frontend/src/App.tsx",
+          "path": "frontend/src/components/PaymentEntryForm.tsx",
           "operation": "modify",
-          "description": "Create main application layout with PaymentEntryForm and PaymentReportTable components. Apply mobile-first responsive container layout with white background and light grey section dividers. Ensure clean, uncluttered structure with proper spacing. No animations or transitions."
+          "description": "Convert invoice number field to accept comma-separated values or multiple entries, add helper text indicating one payment applies to multiple invoices, parse and validate multiple invoice number entries, and submit invoiceNumbers array to backend where each invoice gets the same payment mode details"
         }
       ]
     }

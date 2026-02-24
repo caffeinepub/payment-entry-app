@@ -2,80 +2,8 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-create-a-payment-entry-form-with-customer-invoice-number-required-text-field-and-payment-mode-dropdown-required-options-neft-cheque",
-      "featureTitle": "Create a payment entry form with Customer Invoice Number (required text field) and Payment Mode dropdown (required, options: NEFT, Cheque)",
-      "files": [
-        "frontend/src/components/PaymentEntryForm.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-1"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-when-payment-mode-is-set-to-neft-dynamically-show-transaction-id-utr-number-required-text-field-amount-required-number-field-and-date-of-payment-required-date-picker-hide-all-cheque-specific-fields",
-      "featureTitle": "When Payment Mode is set to NEFT, dynamically show Transaction ID/UTR Number (required text field), Amount (required number field), and Date of Payment (required date picker). Hide all Cheque-specific fields.",
-      "files": [
-        "frontend/src/components/PaymentEntryForm.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-2"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-when-payment-mode-is-set-to-cheque-dynamically-show-bank-name-required-text-field-cheque-number-required-text-field-cheque-amount-required-number-field-and-cheque-date-required-date-picker-hide-all-neft-specific-fields",
-      "featureTitle": "When Payment Mode is set to Cheque, dynamically show Bank Name (required text field), Cheque Number (required text field), Cheque Amount (required number field), and Cheque Date (required date picker). Hide all NEFT-specific fields.",
-      "files": [
-        "frontend/src/components/PaymentEntryForm.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-3"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-on-submit-button-click-save-the-payment-entry-to-the-backend-and-automatically-clear-all-form-fields-to-their-default-state",
-      "featureTitle": "On Submit button click, save the payment entry to the backend and automatically clear all form fields to their default state",
-      "files": [
-        "frontend/src/components/PaymentEntryForm.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-5"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-create-a-report-section-that-displays-all-saved-payment-records-in-a-table-with-columns-invoice-number-payment-mode-transaction-id-utr-neft-amount-neft-date-bank-name-cheque-number-cheque-amount-cheque-date",
-      "featureTitle": "Create a Report section that displays all saved payment records in a table with columns: Invoice Number, Payment Mode, Transaction ID/UTR, NEFT Amount, NEFT Date, Bank Name, Cheque Number, Cheque Amount, Cheque Date",
+      "featureId": "feature-reduce-the-size-and-simplify-the-styling-of-the-clear-records-button-and-download-excel-button-in-the-paymentreporttable-component-to-make-them-smaller-and-more-compact",
+      "featureTitle": "Reduce the size and simplify the styling of the Clear Records button and Download Excel button in the PaymentReportTable component to make them smaller and more compact",
       "files": [
         "frontend/src/components/PaymentReportTable.tsx"
       ],
@@ -87,16 +15,15 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-6"
+        "REQ-11"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-add-a-download-excel-button-in-the-report-section-that-exports-all-payment-records-to-an-excel-file-with-columns-invoice-number-payment-mode-transaction-id-utr-neft-amount-neft-date-bank-name-cheque-number-cheque-amount-cheque-date",
-      "featureTitle": "Add a Download Excel button in the Report section that exports all payment records to an Excel file with columns: Invoice Number, Payment Mode, Transaction ID/UTR, NEFT Amount, NEFT Date, Bank Name, Cheque Number, Cheque Amount, Cheque Date",
+      "featureId": "feature-change-the-invoice-number-field-in-the-payment-entry-form-to-accept-both-text-and-numeric-input-type-text-instead-of-restricted-number-format",
+      "featureTitle": "Change the Invoice Number field in the payment entry form to accept both text and numeric input (type=\"text\" instead of restricted number format)",
       "files": [
-        "frontend/src/components/PaymentReportTable.tsx",
-        "frontend/src/utils/excelExport.ts"
+        "frontend/src/components/PaymentEntryForm.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -106,17 +33,15 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-7"
+        "REQ-12"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-implement-mobile-first-responsive-layout-with-clean-white-and-light-grey-theme-large-input-fields-optimized-for-touch-minimal-ui-with-no-animations-and-lightweight-design-for-fast-loading-on-low-end-android-phones",
-      "featureTitle": "Implement mobile-first responsive layout with clean white and light grey theme, large input fields optimized for touch, minimal UI with no animations, and lightweight design for fast loading on low-end Android phones",
+      "featureId": "feature-add-the-ability-to-select-multiple-payment-modes-neft-and-or-cheque-for-a-single-invoice-number-in-the-payment-entry-form-showing-all-relevant-fields-for-selected-modes-simultaneously",
+      "featureTitle": "Add the ability to select multiple payment modes (NEFT and/or Cheque) for a single invoice number in the payment entry form, showing all relevant fields for selected modes simultaneously",
       "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/index.css",
-        "frontend/tailwind.config.js"
+        "frontend/src/components/PaymentEntryForm.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -126,7 +51,25 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-8"
+        "REQ-13"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-the-ability-to-enter-multiple-invoice-numbers-for-a-single-payment-transaction-allowing-one-payment-neft-or-cheque-to-be-applied-across-multiple-bills",
+      "featureTitle": "Add the ability to enter multiple invoice numbers for a single payment transaction, allowing one payment (NEFT or Cheque) to be applied across multiple bills",
+      "files": [
+        "frontend/src/components/PaymentEntryForm.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-14"
       ],
       "confidence": "high"
     }

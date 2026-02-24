@@ -2,58 +2,58 @@ import List "mo:core/List";
 import Principal "mo:core/Principal";
 import Runtime "mo:core/Runtime";
 import Order "mo:core/Order";
+import Migration "migration";
 
+(with migration = Migration.run)
 actor {
-  type Payment = {
-    invoiceNumber : Nat;
-    paymentMode : Text;
-    user : Principal;
+  type PaymentMode = {
+    mode : Text;
     transactionId : ?Text;
-    neftAmount : ?Nat;
-    neftDate : ?Text;
+    amount : Nat;
+    date : Text;
     bankName : ?Text;
     chequeNumber : ?Text;
-    chequeAmount : ?Nat;
-    chequeDate : ?Text;
+  };
+
+  type Payment = {
+    invoiceNumbers : [Nat];
+    paymentModes : [PaymentMode];
+    user : Principal;
   };
 
   module Payment {
     public func compare(p1 : Payment, p2 : Payment) : Order.Order {
-      Nat.compare(p1.invoiceNumber, p2.invoiceNumber);
+      let firstInvoice1 = if (p1.invoiceNumbers.size() > 0) { p1.invoiceNumbers[0] } else { 0 };
+      let firstInvoice2 = if (p2.invoiceNumbers.size() > 0) { p2.invoiceNumbers[0] } else { 0 };
+      Nat.compare(firstInvoice1, firstInvoice2);
     };
   };
 
   let payments = List.empty<Payment>();
 
   public shared ({ caller }) func submitPayment(
-    invoiceNumber : Nat,
-    paymentMode : Text,
-    transactionId : ?Text,
-    neftAmount : ?Nat,
-    neftDate : ?Text,
-    bankName : ?Text,
-    chequeNumber : ?Text,
-    chequeAmount : ?Nat,
-    chequeDate : ?Text,
+    invoiceNumbers : [Nat],
+    paymentModes : [PaymentMode],
   ) : async () {
-    if (invoiceNumber == 0) {
-      Runtime.trap("Invoice number cannot be 0");
+    if (invoiceNumbers.size() == 0) {
+      Runtime.trap("At least one invoice number must be provided");
+    };
+
+    if (paymentModes.size() == 0) {
+      Runtime.trap("At least one payment mode must be provided");
     };
 
     let newPayment : Payment = {
-      invoiceNumber;
-      paymentMode;
+      invoiceNumbers;
+      paymentModes;
       user = caller;
-      transactionId;
-      neftAmount;
-      neftDate;
-      bankName;
-      chequeNumber;
-      chequeAmount;
-      chequeDate;
     };
 
     payments.add(newPayment);
+  };
+
+  public shared ({ caller }) func clearAllPayments() : async () {
+    payments.clear();
   };
 
   public query ({ caller }) func getAllPayments() : async [Payment] {
@@ -71,7 +71,23 @@ actor {
   public query ({ caller }) func getPaymentsByInvoiceNumber(invoiceNumber : Nat) : async [Payment] {
     payments.filter(
       func(payment) {
-        payment.invoiceNumber == invoiceNumber;
+        payment.invoiceNumbers.any(
+          func(i) {
+            i == invoiceNumber;
+          }
+        );
+      }
+    ).toArray().sort();
+  };
+
+  public query ({ caller }) func getPaymentsByMode(mode : Text) : async [Payment] {
+    payments.filter(
+      func(payment) {
+        payment.paymentModes.any(
+          func(m) {
+            m.mode == mode;
+          }
+        );
       }
     ).toArray().sort();
   };

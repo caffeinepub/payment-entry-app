@@ -1,29 +1,41 @@
 import type { Payment } from '../backend';
+import { formatDate } from './dateFormat';
 
 export function exportToExcel(payments: Payment[]) {
+  // Flatten payments for export (one row per payment mode per invoice)
+  const flattenedRecords = payments.flatMap(payment => 
+    payment.invoiceNumbers.flatMap(invoiceNum =>
+      payment.paymentModes.map(mode => ({
+        invoiceNumber: invoiceNum,
+        mode: mode.mode,
+        transactionId: mode.transactionId,
+        amount: mode.amount,
+        date: mode.date,
+        bankName: mode.bankName,
+        chequeNumber: mode.chequeNumber,
+      }))
+    )
+  );
+
   // Create CSV content
   const headers = [
     'Invoice Number',
     'Payment Mode',
     'Transaction ID / UTR',
-    'NEFT Amount',
-    'NEFT Date',
+    'Amount',
+    'Date',
     'Bank Name',
-    'Cheque Number',
-    'Cheque Amount',
-    'Cheque Date'
+    'Cheque Number'
   ];
 
-  const rows = payments.map(payment => [
-    payment.invoiceNumber.toString(),
-    payment.paymentMode,
-    payment.transactionId || '',
-    payment.neftAmount ? payment.neftAmount.toString() : '',
-    payment.neftDate || '',
-    payment.bankName || '',
-    payment.chequeNumber || '',
-    payment.chequeAmount ? payment.chequeAmount.toString() : '',
-    payment.chequeDate || ''
+  const rows = flattenedRecords.map(record => [
+    record.invoiceNumber.toString(),
+    record.mode,
+    record.transactionId || '',
+    record.amount.toString(),
+    formatDate(record.date),
+    record.bankName || '',
+    record.chequeNumber || ''
   ]);
 
   // Convert to CSV format
