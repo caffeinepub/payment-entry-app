@@ -1,0 +1,124 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "Mobile-friendly web-based payment entry app for office staff. Features dynamic form with NEFT/Cheque payment modes, local storage persistence, and Excel export. Lightweight, minimal design optimized for low-end Android phones.",
+  "architectural_notes": [
+    "Frontend-only app using HTML, CSS, JavaScript",
+    "Data persistence via browser localStorage",
+    "Mobile-first responsive design for low-end Android devices",
+    "Lightweight Excel export using JS library (e.g., SheetJS)",
+    "Conditional field rendering based on payment mode selection",
+    "Clean white + light grey minimal UI theme",
+    "No animations or heavy assets for performance"
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-create-a-payment-entry-form-with-customer-invoice-number-required-text-field-and-payment-mode-dropdown-required-options-neft-cheque",
+      "title": "Create a payment entry form with Customer Invoice Number (required text field) and Payment Mode dropdown (required, options: NEFT, Cheque)",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-when-payment-mode-is-set-to-neft-dynamically-show-transaction-id-utr-number-required-text-field-amount-required-number-field-and-date-of-payment-required-date-picker-hide-all-cheque-specific-fields",
+      "title": "When Payment Mode is set to NEFT, dynamically show Transaction ID/UTR Number (required text field), Amount (required number field), and Date of Payment (required date picker). Hide all Cheque-specific fields.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-when-payment-mode-is-set-to-cheque-dynamically-show-bank-name-required-text-field-cheque-number-required-text-field-cheque-amount-required-number-field-and-cheque-date-required-date-picker-hide-all-neft-specific-fields",
+      "title": "When Payment Mode is set to Cheque, dynamically show Bank Name (required text field), Cheque Number (required text field), Cheque Amount (required number field), and Cheque Date (required date picker). Hide all NEFT-specific fields.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-on-submit-button-click-save-the-payment-entry-to-the-backend-and-automatically-clear-all-form-fields-to-their-default-state",
+      "title": "On Submit button click, save the payment entry to the backend and automatically clear all form fields to their default state",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-report-section-that-displays-all-saved-payment-records-in-a-table-with-columns-invoice-number-payment-mode-transaction-id-utr-neft-amount-neft-date-bank-name-cheque-number-cheque-amount-cheque-date",
+      "title": "Create a Report section that displays all saved payment records in a table with columns: Invoice Number, Payment Mode, Transaction ID/UTR, NEFT Amount, NEFT Date, Bank Name, Cheque Number, Cheque Amount, Cheque Date",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-download-excel-button-in-the-report-section-that-exports-all-payment-records-to-an-excel-file-with-columns-invoice-number-payment-mode-transaction-id-utr-neft-amount-neft-date-bank-name-cheque-number-cheque-amount-cheque-date",
+      "title": "Add a Download Excel button in the Report section that exports all payment records to an Excel file with columns: Invoice Number, Payment Mode, Transaction ID/UTR, NEFT Amount, NEFT Date, Bank Name, Cheque Number, Cheque Amount, Cheque Date",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-mobile-first-responsive-layout-with-clean-white-and-light-grey-theme-large-input-fields-optimized-for-touch-minimal-ui-with-no-animations-and-lightweight-design-for-fast-loading-on-low-end-android-phones",
+      "title": "Implement mobile-first responsive layout with clean white and light grey theme, large input fields optimized for touch, minimal UI with no animations, and lightweight design for fast loading on low-end Android phones",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Dynamic payment form with Invoice Number and Payment Mode dropdown (NEFT/Cheque)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Conditional fields for NEFT mode (Transaction ID, Amount, Date)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Conditional fields for Cheque mode (Bank Name, Cheque Number, Amount, Date)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Form submission saves to local storage and auto-clears form",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Report section displaying all saved payment records in a table",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Excel export functionality with all payment columns",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Store all payment entry data in the backend with fields: Invoice Number, Payment Mode, Transaction ID (NEFT only), NEFT Amount (NEFT only), NEFT Date (NEFT only), Bank Name (Cheque only), Cheque Number (Cheque only), Cheque Amount (Cheque only), Cheque Date (Cheque only)",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "Payment Entry App",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

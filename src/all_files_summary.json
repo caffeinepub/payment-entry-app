@@ -1,0 +1,18 @@
+{
+  "backend/main.mo": "Motoko actor defining a Payment type and functions to submit payments, retrieve all payments, filter by user, and filter by invoice number, with in-memory list storage.",
+  "feature_evidence.json": "Feature evidence report documenting implemented payment form features including dynamic field rendering, backend submission, and report table with export functionality.",
+  "frontend-file-summaries.txt": "JSON object containing one-line summaries of frontend files including components, hooks, utilities, and configuration.",
+  "frontend/index.css": "Tailwind CSS configuration with OKLCH color system defining light and dark theme CSS variables for the application.",
+  "frontend/index.html": "HTML entry point with viewport meta tag and root div for mounting the React application.",
+  "frontend/src/App.tsx": "Main React component rendering header, payment entry form section, payment records table section, and footer with attribution link.",
+  "frontend/src/components/PaymentEntryForm.tsx": "Payment form component with conditional NEFT/Cheque field rendering, validation, submission to backend via mutation hook, and automatic form reset on success.",
+  "frontend/src/components/PaymentReportTable.tsx": "Table component displaying all payment records with loading/error states and Excel export button using the exportToExcel utility.",
+  "frontend/src/hooks/useActor.ts": "Custom hook managing backend actor creation with Internet Identity authentication, query caching, and automatic query invalidation on identity changes.",
+  "frontend/src/hooks/useInternetIdentity.ts": "React hook and provider for Internet Identity authentication on ICP, managing login state, identity persistence, and delegation validation with configurable AuthClient options.",
+  "frontend/src/hooks/useQueries.ts": "React Query hooks for fetching all payments and submitting new payment entries to the backend actor, with automatic cache invalidation on mutations.",
+  "frontend/src/index.css": "Tailwind CSS configuration with custom CSS variables for light/dark themes, mobile-optimized input styling, and minimum touch target sizes for accessibility.",
+  "frontend/src/main.tsx": "Application entry point that sets up React Query, Internet Identity provider, and renders the root App component.",
+  "frontend/src/utils/excelExport.ts": "Utility function to export payment records array to CSV format and trigger browser download with timestamped filename.",
+  "frontend/tailwind.config.js": "Tailwind configuration with custom color scheme using OKLCH color space, responsive container settings, and plugins for typography, container queries, and animations.",
+  "project_state.json": "Project metadata documenting a mobile-friendly payment entry app with dynamic NEFT/Cheque forms, localStorage persistence, Excel export, and existing features including form validation and report generation."
+}

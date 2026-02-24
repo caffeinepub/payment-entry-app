@@ -1,0 +1,156 @@
+{
+  "kind": "build_request",
+  "title": "Build payment entry app with dynamic form and Excel export",
+  "projectName": "Payment Entry",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Create a payment entry form with Customer Invoice Number (required text field) and Payment Mode dropdown (required, options: NEFT, Cheque)",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Invoice Number field accepts text input and is marked as required",
+        "Payment Mode dropdown displays exactly two options: NEFT and Cheque",
+        "Both fields are always visible on the form"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "When Payment Mode is set to NEFT, dynamically show Transaction ID/UTR Number (required text field), Amount (required number field), and Date of Payment (required date picker). Hide all Cheque-specific fields.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ]
+      },
+      "acceptanceCriteria": [
+        "NEFT fields appear only when NEFT is selected",
+        "All three NEFT fields are marked as required",
+        "Cheque fields are hidden when NEFT mode is active",
+        "Fields update immediately when Payment Mode changes"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "When Payment Mode is set to Cheque, dynamically show Bank Name (required text field), Cheque Number (required text field), Cheque Amount (required number field), and Cheque Date (required date picker). Hide all NEFT-specific fields.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Cheque fields appear only when Cheque is selected",
+        "All four Cheque fields are marked as required",
+        "NEFT fields are hidden when Cheque mode is active",
+        "Fields update immediately when Payment Mode changes"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Store all payment entry data in the backend with fields: Invoice Number, Payment Mode, Transaction ID (NEFT only), NEFT Amount (NEFT only), NEFT Date (NEFT only), Bank Name (Cheque only), Cheque Number (Cheque only), Cheque Amount (Cheque only), Cheque Date (Cheque only)",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend stores payment records with all specified fields",
+        "Conditional fields store null/empty when not applicable to payment mode",
+        "Data persists between page reloads",
+        "Records can be retrieved for display and export"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "On Submit button click, save the payment entry to the backend and automatically clear all form fields to their default state",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Submit saves complete payment record to backend",
+        "Form clears immediately after successful save",
+        "Invoice Number resets to empty",
+        "Payment Mode resets to default/unselected state",
+        "All conditional fields clear and hide appropriately"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Create a Report section that displays all saved payment records in a table with columns: Invoice Number, Payment Mode, Transaction ID/UTR, NEFT Amount, NEFT Date, Bank Name, Cheque Number, Cheque Amount, Cheque Date",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Table displays all saved payment entries",
+        "All nine columns are visible in the table",
+        "Empty cells display for fields not applicable to payment mode",
+        "Table updates when new entries are submitted"
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Add a Download Excel button in the Report section that exports all payment records to an Excel file with columns: Invoice Number, Payment Mode, Transaction ID/UTR, NEFT Amount, NEFT Date, Bank Name, Cheque Number, Cheque Amount, Cheque Date",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Download Excel button is visible in Report section",
+        "Clicking button generates and downloads Excel file",
+        "Excel file contains all nine specified columns",
+        "Excel includes all saved payment records",
+        "Empty cells for fields not applicable to payment mode"
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "text": "Implement mobile-first responsive layout with clean white and light grey theme, large input fields optimized for touch, minimal UI with no animations, and lightweight design for fast loading on low-end Android phones",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Layout is fully responsive and mobile-optimized",
+        "Color scheme uses white and light grey",
+        "Input fields are large enough for easy mobile typing",
+        "No animations or transitions",
+        "Page loads quickly with minimal resources",
+        "UI is clean and uncluttered"
+      ]
+    }
+  ],
+  "constraints": [
+    "Must be lightweight and optimized for low-end Android phones",
+    "Must use only the platform's supported stack (React, Motoko backend)",
+    "No animations or heavy visual effects",
+    "Must load and perform quickly"
+  ],
+  "nonGoals": [
+    "User authentication or access control",
+    "Payment processing or integration with payment gateways",
+    "Advanced reporting or analytics features",
+    "Editing or deleting existing payment records",
+    "Multi-user collaboration features"
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}
